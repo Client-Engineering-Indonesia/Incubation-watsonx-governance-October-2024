@@ -12,7 +12,6 @@ In this lab, you will perform the tasks of a few different personae in the **AI 
   1. [Create a use case for governing prompts](#create-use-case)
   2. [Govern your first prompt](#govern-prompt-in-use-case)
   3. [Deploy your prompt](#deploy-prompts)
-  4. [Activate prompt monitoring](#monitor-prompt)
 
 ---
 ### 1. Create a use case for governing prompts<a name="create-use-case"/>
@@ -69,72 +68,4 @@ Now go to the **Deployment Space** and see that the prompt hasn’t actually bee
 Then go back to the use case and see the prompt as **Pending Evaluation**.
 
 <img width="425" alt="image" src="images/image11.png">
-
----
-### 5. Activate prompt monitoring<a name="monitor-prompt"/>
----
-
-Go to the deployed prompt and pick the **Evaluations** tab. Select **Activate**.
-
-
-![](images/image12.png)
-
-Run another evaluation and check the results. It may seem redundant to run evaluations with the same prompt and the same data set over and over, but keep in mind that 
-- The evaluations would potentially be performed by different people in different roles, e.g. the prompt developer would not be the one evaluating it for use in production,
-- In a real world scenario, the data sets would differ between evaluations.
-
-Note that in the use case, the status changes from **Pending** to **Evaluated**.
-![](images/image13.png)
-
-Change the use case status to **Validation complete**.
-
-Go to the AI FactSheet of the prompt and export a report in PDF format. Familiarize yourself with the content of the report.
-
-
-Now create another deployment space as stage **Production** and give it a unique name with **- Production** attached at the end. Then promote the prompt to it.
-
-See how the use case is updated to show the prompt under **Operate**. But it’s not actually deployed yet, so let’s do that, too.
-![](images/image15.png)
-
-It’s pending evaluation, so let’s run yet another evaluation. See how when you activate the monitoring, it now shows **Drift v2** as an additional option. It also describes how payload data must have column that match the input variables of the prompt.
-![](images/image16.png)
-
-Once the prompt is deployed into production, we can test it to make sure it is functioning as expected. Open the prompt in the **Deployment Space** and select the **Test** tab.
-![](images/image24.png)
-
-Click on **Generate** to make sure the prompt works.
-
-Review the schemas of the Payload and the Feedback data. The CSV files we upload later need to follow these schemas.
-
-We are now ready to prime the prompt deployment with baseline data. You can use the **Insurance claim summarization drift payload 0 - baseline.csv** file to do so. Upload this file as the payload data. We are not uploading any feedback data at this point.
-
-![](images/image17.png)
-
-Click on **Evaluate now**. It should result in a passed test.
-![](images/image18.png)
-
-If you now select **Configure monitors** in the **Action** menu, you see that **Drift v2** is enabled, you have a baseline of 100 records and you can edit the threshold values here, too. In a real world scenario, these thresholds should be adjusted to the concrete use case and prompt. But we'll leave that to an advanced lab and won't change them now.
-![](images/image19.png)
-
-The system will now monitor invocations of the prompt and detect potential drift. To simulate a drift example, you can upload a number of data files, named **Insurance claim summarization drift payload [1 hrough 4].csv**. Upload all of them as Payload data. Let some time pass between the runs, so that it shows a meaningful timeline. Once you have run these evaluations, you will see another diagram show up on the screen, namely for the Drift.
-![](images/image20.png)
-
-You can click on the blue arrow in the top right corner of that section to get a more detailed view.
-![](images/image21.png)
-
-Make sure you have selected the right time settings to see the drift change over time. There are only three criteria which go into the drift calculations: "output", "output metadata drift" and "input metadata drift". 
-
-These measurements say nothing about the quality of the prompt. To measure it, we need to upload feedback data. Go to the **Evaluations** tab and click on **Actions** -> **Evaluate now**. Upload the [Insurance claim summarization feedback.csv](./data/Insurance%20claim%20summarization%20feedback.csv) file.
-
-When the run is finished, you can see a panel with **Generative AI Quality - Text summarization** metrics on the lower right of the screen. Click on the blue arrow in the top right corner to get a more detailed view of the metrics collected.
-![](images/image25.png)
-
-Pending here is a more detailed discussion of the various metrics, what scores to expect and how the thresholds should be set that lead to a potential alert.
-
-Finally, we are ready to advance the status of the use case to **in operation**. The prompt is deployed in production and is being monitored for drift and quality. Given that the evaluations failed at some steps along the way, we may want to also change the **Risk level** to **Medium**.
-![](images/image23.png) 
-
-<div align="center">
-    <img src="images/victory.png" alt="description_of_image">
-</div>
 
